@@ -98,13 +98,16 @@ const PermissionModal = ({ cameraGranted, micGranted, onRequestPermissions, onCo
 
 const ViolationModal = ({ violationType, timeRemaining, onAction, onRequestPermissions, cameraGranted, micGranted }) => (
   <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-    <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">
+    <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4 relative">
+      <div className="absolute bottom-4 right-4 bg-red-600 text-white w-10 h-10 rounded-full flex items-center justify-center text-lg font-bold">
+        {timeRemaining}
+      </div>
+      <h3 className="text-lg font-semibold text-gray-900 mb-4 pr-12">
         {violationType === 'fullscreen' ? 'Please be in Full Screen' : 'Please ensure all permissions are granted'}
       </h3>
       
       {violationType === 'permissions' && (
-        <div className="space-y-3 mb-4">
+        <div className="space-y-3 mb-4 pr-12">
           <div className="flex items-center space-x-3">
             <FaVideo className="text-gray-600" />
             <span className="text-gray-700">Video Permission</span>
@@ -126,7 +129,7 @@ const ViolationModal = ({ violationType, timeRemaining, onAction, onRequestPermi
         </div>
       )}
       
-      <p className="text-gray-600 mb-6">
+      <p className="text-gray-600 mb-6 pr-12">
         Auto-submitting test in {timeRemaining} seconds...
       </p>
       

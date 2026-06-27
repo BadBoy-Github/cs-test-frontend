@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import API from '../utils/api';
-import { FaPlus, FaList, FaChartBar, FaUsers, FaPoll, FaTrophy } from 'react-icons/fa';
+import { FaPlus, FaList, FaChartBar, FaUsers, FaPoll, FaTrophy, FaSync } from 'react-icons/fa';
 import Loader from '../components/Loader';
 import StudyStreak from '../components/StudyStreak';
 import EmptyState from '../components/EmptyState';
@@ -15,8 +15,10 @@ const Dashboard = () => {
   const [tests, setTests] = useState([]);
   const [userAttempts, setUserAttempts] = useState({});
   const [sessionTime, setSessionTime] = useState(null);
+  const [refreshing, setRefreshing] = useState(false);
 
   const fetchTests = async () => {
+    setRefreshing(true);
     try {
       const [testsRes, attemptsRes] = await Promise.all([
         API.get('/tests'),
@@ -36,6 +38,8 @@ const Dashboard = () => {
       setUserAttempts(attemptsMap);
     } catch (err) {
       console.error(err);
+    } finally {
+      setRefreshing(false);
     }
   };
 
@@ -168,7 +172,7 @@ const Dashboard = () => {
               </button>
             </div>
           </div>
-        ) : (
+) : (
           <div>
             <div className="mb-6 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
               <div>
@@ -188,9 +192,17 @@ const Dashboard = () => {
               </div>
               <StudyStreak />
             </div>
-
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">
-              Available Tests
+            
+            <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center justify-between">
+              <span>Available Tests</span>
+              <button
+                onClick={fetchTests}
+                disabled={refreshing}
+                className="p-2 rounded-full text-gray-600 hover:text-emerald-600 hover:bg-gray-100 transition-colors disabled:opacity-50"
+                title="Reload tests"
+              >
+                <FaSync className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
+              </button>
             </h2>
             {tests.length === 0 ? (
               <EmptyState
