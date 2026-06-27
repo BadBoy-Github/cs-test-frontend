@@ -1,7 +1,7 @@
 import { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { FaUser, FaLock, FaEnvelope, FaPhone } from 'react-icons/fa';
+import { FaUser, FaLock, FaEnvelope, FaPhone, FaEye, FaEyeSlash } from 'react-icons/fa';
 import { useModal } from '../components/Modal';
 
 const Login = () => {
@@ -11,14 +11,18 @@ const Login = () => {
     name: '',
     email: '',
     phone: '',
-    password: ''
+    password: '',
+    confirmPassword: ''
   });
   const [formErrors, setFormErrors] = useState({
     name: '',
     email: '',
     phone: '',
-    password: ''
+    password: '',
+    confirmPassword: ''
   });
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const { login, register } = useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
@@ -67,6 +71,13 @@ const Login = () => {
           error = 'Password must contain at least one uppercase letter, one lowercase letter, and one number';
         }
         break;
+      case 'confirmPassword':
+        if (!value) {
+          error = 'Please confirm your password';
+        } else if (value !== formData.password) {
+          error = 'Passwords do not match';
+        }
+        break;
       default:
         break;
     }
@@ -90,6 +101,7 @@ const Login = () => {
     if (!isLogin) {
       errors.name = validateField('name', formData.name);
       errors.phone = validateField('phone', formData.phone);
+      errors.confirmPassword = validateField('confirmPassword', formData.confirmPassword);
     }
 
     errors.email = validateField('email', formData.email);
@@ -221,21 +233,21 @@ const Login = () => {
                     autoComplete="tel"
                   />
                 </div>
-                {formErrors.phone && (
-                  <p className="mt-1 text-sm text-red-600">
-                    {formErrors.phone}
-                  </p>
-                )}
+{formErrors.phone && (
+                 <p className="mt-1 text-sm text-red-600">
+                   {formErrors.phone}
+                 </p>
+               )}
               </div>
             )}
-            <div>
+            <div className="relative">
               <div className="flex items-center">
                 <FaLock className="text-gray-400 mr-2" />
                 <input
                   id="password"
                   name="password"
-                  type="password"
-                  className={`appearance-none rounded-none relative block w-full px-3 py-2 border placeholder-gray-500 text-gray-900 ${isLogin ? 'rounded-b-md' : ''} focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 focus:z-10 sm:text-sm ${
+                  type={showPassword ? "text" : "password"}
+                  className={`appearance-none rounded-none relative block w-full px-3 py-2 pr-10 border placeholder-gray-500 text-gray-900 ${isLogin ? 'rounded-b-md' : ''} focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 focus:z-10 sm:text-sm ${
                     formErrors.password ? 'border-red-500' : 'border-gray-300'
                   }`}
                   placeholder="Password"
@@ -243,6 +255,14 @@ const Login = () => {
                   onChange={handleChange}
                   autoComplete={isLogin ? "current-password" : "new-password"}
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-2 text-gray-400 hover:text-gray-600 focus:outline-none"
+                  tabIndex={-1}
+                >
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </button>
               </div>
               {formErrors.password && (
                 <p className="mt-1 text-sm text-red-600">
@@ -250,6 +270,38 @@ const Login = () => {
                 </p>
               )}
             </div>
+            {!isLogin && (
+              <div className="mt-4 relative">
+                <div className="flex items-center">
+                  <FaLock className="text-gray-400 mr-2" />
+                  <input
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    type={showConfirmPassword ? "text" : "password"}
+                    className={`appearance-none rounded-none relative block w-full px-3 py-2 pr-10 border placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 focus:z-10 sm:text-sm ${
+                      formErrors.confirmPassword ? 'border-red-500' : 'border-gray-300'
+                    }`}
+                    placeholder="Re-type Password"
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                    autoComplete="new-password"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    className="absolute right-2 text-gray-400 hover:text-gray-600 focus:outline-none"
+                    tabIndex={-1}
+                  >
+                    {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                  </button>
+                </div>
+                {formErrors.confirmPassword && (
+                  <p className="mt-1 text-sm text-red-600">
+                    {formErrors.confirmPassword}
+                  </p>
+                )}
+              </div>
+            )}
           </div>
           <div>
             <button
