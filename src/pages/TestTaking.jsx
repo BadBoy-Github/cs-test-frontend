@@ -98,16 +98,13 @@ const PermissionModal = ({ cameraGranted, micGranted, onRequestPermissions, onCo
 
 const ViolationModal = ({ violationType, timeRemaining, onAction, onRequestPermissions, cameraGranted, micGranted }) => (
   <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-    <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4 relative">
-      <div className="absolute bottom-4 right-4 bg-red-600 text-white w-10 h-10 rounded-full flex items-center justify-center text-lg font-bold">
-        {timeRemaining}
-      </div>
-      <h3 className="text-lg font-semibold text-gray-900 mb-4 pr-12">
+    <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+      <h3 className="text-lg font-semibold text-gray-900 mb-4">
         {violationType === 'fullscreen' ? 'Please be in Full Screen' : 'Please ensure all permissions are granted'}
       </h3>
       
       {violationType === 'permissions' && (
-        <div className="space-y-3 mb-4 pr-12">
+        <div className="space-y-3 mb-4">
           <div className="flex items-center space-x-3">
             <FaVideo className="text-gray-600" />
             <span className="text-gray-700">Video Permission</span>
@@ -129,7 +126,7 @@ const ViolationModal = ({ violationType, timeRemaining, onAction, onRequestPermi
         </div>
       )}
       
-      <p className="text-gray-600 mb-6 pr-12">
+      <p className="text-gray-600 mb-6">
         Auto-submitting test in {timeRemaining} seconds...
       </p>
       
@@ -181,6 +178,9 @@ const TestTaking = () => {
   const violationIntervalRef = useRef(null);
   const mediaStreamRef = useRef(null);
   const permissionCheckIntervalRef = useRef(null);
+  const autoSubmitRef = useRef(null);
+  const permissionRevokedRef = useRef(setPermissionRevoked);
+  const fullscreenExitedRef = useRef(setIsFullscreenExited);
 
   const shuffleArray = (array) => {
     const shuffled = [...array];
@@ -304,6 +304,12 @@ const TestTaking = () => {
     }
   };
 
+  useEffect(() => {
+    autoSubmitRef.current = handleAutoSubmit;
+    permissionRevokedRef.current = setPermissionRevoked;
+    fullscreenExitedRef.current = setIsFullscreenExited;
+  });
+
   const startViolationTimer = (type) => {
     if (violationIntervalRef.current) {
       clearInterval(violationIntervalRef.current);
@@ -315,12 +321,11 @@ const TestTaking = () => {
       setViolationTimeLeft(prev => {
         if (prev <= 1) {
           clearInterval(violationIntervalRef.current);
+          autoSubmitRef.current();
           if (type === 'fullscreen') {
-            handleAutoSubmit();
-            setIsFullscreenExited(false);
+            fullscreenExitedRef.current(false);
           } else if (type === 'permissions') {
-            handleAutoSubmit();
-            setPermissionRevoked(false);
+            permissionRevokedRef.current(false);
           }
           setViolationModalType(null);
           return 0;
@@ -586,7 +591,7 @@ const TestTaking = () => {
       document.removeEventListener('fullscreenchange', handleFullscreenChange);
       if (violationIntervalRef.current) clearInterval(violationIntervalRef.current);
     };
-  }, [permissionsGranted, testSubmitted, isFullscreenExited]);
+  }, [permissionsGranted, testSubmitted]);
 
   const submitTest = async () => {
     if (!attemptId) {
@@ -792,6 +797,7 @@ const TestTaking = () => {
 
       {violationModalType && (
         <ViolationModal
+          key={violationTimeLeft}
           violationType={violationModalType}
           timeRemaining={violationTimeLeft}
           onAction={handleViolationAction}
@@ -873,38 +879,38 @@ const TestTaking = () => {
                  </div>
                )}
 
-                {(question.type === 'mcq' || question.type === 'checkbox') && question.options && (
-                  <div className="space-y-2 mb-6">
-                    {question.options.map((option, index) => {
-                      const isSelected = question.type === 'mcq'
-                        ? answers[question._id] === option
-                        : (answers[question._id] || []).includes(option);
-                      return (
-                        <label
-                          key={index}
-                          className={`flex items-start p-3 rounded-lg border cursor-pointer transition-all ${
-                            isSelected
-                              ? 'bg-emerald-50 border-emerald-500'
-                              : 'bg-gray-50 border-gray-200 hover:bg-gray-100'
-                          }`}
-                        >
-                           <input
-                             type={question.type === 'mcq' ? 'radio' : 'checkbox'}
-                             name={question.type === 'mcq' ? 'answer' : `answer-${index}`}
-                             value={option}
-                             checked={isSelected}
-                             onChange={() => handleAnswer(question._id, option, question.type === 'checkbox')}
-                             disabled={testSubmitted}
-                             className="mr-3 h-4 w-4 mt-0.5 flex-shrink-0"
-                           />
-                           <span className="text-sm font-medium text-gray-700 break-words whitespace-normal flex-1 min-w-0">
-                             {String.fromCharCode(65 + index)}. {option}
-                           </span>
-                        </label>
-                      );
-                    })}
-                  </div>
-                )}
+                 {(question.type === 'mcq' || question.type === 'checkbox') && question.options && (
+                   <div className="space-y-2 mb-6">
+                     {question.options.map((option, index) => {
+                       const isSelected = question.type === 'mcq'
+                         ? answers[question._id] === option
+                         : (answers[question._id] || []).includes(option);
+                       return (
+                         <label
+                           key={index}
+                           className={`flex items-start p-3 rounded-lg border cursor-pointer transition-all ${
+                             isSelected
+                               ? 'bg-emerald-50 border-emerald-500'
+                               : 'bg-gray-50 border-gray-200 hover:bg-gray-100'
+                           }`}
+                         >
+                            <input
+                              type={question.type === 'mcq' ? 'radio' : 'checkbox'}
+                              name={question.type === 'mcq' ? 'answer' : `answer-${index}`}
+                              value={option}
+                              checked={isSelected}
+                              onChange={() => handleAnswer(question._id, option, question.type === 'checkbox')}
+                              disabled={testSubmitted}
+                              className="mr-3 h-4 w-4 mt-0.5 flex-shrink-0"
+                            />
+                            <span className="text-sm font-medium text-gray-700 break-words whitespace-normal flex-1 min-w-0">
+                              {String.fromCharCode(65 + index)}. {option}
+                            </span>
+                         </label>
+                       );
+                     })}
+                   </div>
+                 )}
 
                {question.type === 'descriptive' && (
                  <textarea
@@ -963,49 +969,49 @@ const TestTaking = () => {
              </div>
            </div>
 
-           <div className="w-64 hidden lg:block">
-             <div className="sticky top-6 bg-white p-4 rounded-lg shadow">
-               <h3 className="text-sm font-semibold text-gray-700 mb-3">
-                 Question Navigation
-               </h3>
-               <div className="grid grid-cols-5 gap-2">
-                 {questions.map((q, index) => (
-                   <button
-                     key={q._id}
-                     onClick={() => goToQuestion(index)}
-                     disabled={testSubmitted}
-                     className={getQuestionStatusClass(index)}
-                     title={`Question ${index + 1}${getQuestionStatus(index) === 'flagged' ? ' (flagged)' : ''}`}
-                   >
-                     {index + 1}
-                   </button>
-                 ))}
-               </div>
+          <div className="w-64 hidden lg:block">
+            <div className="sticky top-6 bg-white p-4 rounded-lg shadow">
+              <h3 className="text-sm font-semibold text-gray-700 mb-3">
+                Question Navigation
+              </h3>
+              <div className="grid grid-cols-5 gap-2">
+                {questions.map((q, index) => (
+                  <button
+                    key={q._id}
+                    onClick={() => goToQuestion(index)}
+                    disabled={testSubmitted}
+                    className={getQuestionStatusClass(index)}
+                    title={`Question ${index + 1}${getQuestionStatus(index) === 'flagged' ? ' (flagged)' : ''}`}
+                  >
+                    {index + 1}
+                  </button>
+                ))}
+              </div>
 
-               <div className="mt-4 pt-4 border-t border-gray-200">
-                 <div className="space-y-2 text-xs">
-                   <div className="flex items-center space-x-2">
-                     <span className="w-4 h-4 rounded-full bg-emerald-600"></span>
-                     <span className="text-gray-600">Current</span>
-                   </div>
-                   <div className="flex items-center space-x-2">
-                     <span className="w-4 h-4 rounded-full bg-green-100 text-green-800 border border-green-300 flex items-center justify-center text-[10px]">✓</span>
-                     <span className="text-gray-600">Answered</span>
-                   </div>
-                   <div className="flex items-center space-x-2">
-                     <span className="w-4 h-4 rounded-full bg-orange-100 text-orange-800 border border-orange-300 flex items-center justify-center text-[10px]">🚩</span>
-                     <span className="text-gray-600">Flagged</span>
-                   </div>
-                   <div className="flex items-center space-x-2">
-                     <span className="w-4 h-4 rounded-full bg-gray-100 text-gray-600 border border-gray-300 flex items-center justify-center text-[10px]">-</span>
-                     <span className="text-gray-600">Not Answered</span>
-                   </div>
-                 </div>
-               </div>
-             </div>
-           </div>
-         </div>
-       </main>
+              <div className="mt-4 pt-4 border-t border-gray-200">
+                <div className="space-y-2 text-xs">
+                  <div className="flex items-center space-x-2">
+                    <span className="w-4 h-4 rounded-full bg-emerald-600"></span>
+                    <span className="text-gray-600">Current</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <span className="w-4 h-4 rounded-full bg-green-100 text-green-800 border border-green-300 flex items-center justify-center text-[10px]">✓</span>
+                    <span className="text-gray-600">Answered</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <span className="w-4 h-4 rounded-full bg-orange-100 text-orange-800 border border-orange-300 flex items-center justify-center text-[10px]">🚩</span>
+                    <span className="text-gray-600">Flagged</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <span className="w-4 h-4 rounded-full bg-gray-100 text-gray-600 border border-gray-300 flex items-center justify-center text-[10px]">-</span>
+                    <span className="text-gray-600">Not Answered</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
 
        <Confetti trigger={showConfetti} duration={3000} />
        <ImageZoomModal
