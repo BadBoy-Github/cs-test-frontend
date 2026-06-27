@@ -179,8 +179,7 @@ const TestTaking = () => {
   const mediaStreamRef = useRef(null);
   const permissionCheckIntervalRef = useRef(null);
   const autoSubmitRef = useRef(null);
-  const permissionRevokedRef = useRef(setPermissionRevoked);
-  const fullscreenExitedRef = useRef(setIsFullscreenExited);
+  const attemptIdRef = useRef(attemptId);
 
   const shuffleArray = (array) => {
     const shuffled = [...array];
@@ -259,8 +258,12 @@ const TestTaking = () => {
     setSubmittedQuestions(prev => new Set([...prev, questionId]));
   };
 
+  useEffect(() => {
+    attemptIdRef.current = attemptId;
+  }, [attemptId]);
+
   const handleAutoSubmit = async () => {
-    if (isSubmitting || testSubmitted) return;
+    if (isSubmitting || testSubmitted || !attemptIdRef.current) return;
     setIsSubmitting(true);
     try {
       for (const question of questions) {
@@ -270,7 +273,7 @@ const TestTaking = () => {
         }
       }
 
-      const result = await API.post(`/attempts/${attemptId}/complete`);
+      const result = await API.post(`/attempts/${attemptIdRef.current}/complete`);
       setTestSubmitted(true);
 
       if (storageKeyRef.current) {
@@ -306,8 +309,6 @@ const TestTaking = () => {
 
   useEffect(() => {
     autoSubmitRef.current = handleAutoSubmit;
-    permissionRevokedRef.current = setPermissionRevoked;
-    fullscreenExitedRef.current = setIsFullscreenExited;
   });
 
   const startViolationTimer = (type) => {
@@ -322,11 +323,6 @@ const TestTaking = () => {
         if (prev <= 1) {
           clearInterval(violationIntervalRef.current);
           autoSubmitRef.current();
-          if (type === 'fullscreen') {
-            fullscreenExitedRef.current(false);
-          } else if (type === 'permissions') {
-            permissionRevokedRef.current(false);
-          }
           setViolationModalType(null);
           return 0;
         }
@@ -372,7 +368,7 @@ const TestTaking = () => {
 
   useEffect(() => {
     const checkDuringTest = async () => {
-      if (!permissionsGranted || testSubmitted) return;
+      if (!permissionsGranted || testSubmitted || !attemptId) return;
       
       const allGranted = await checkMediaPermissions();
       if (!allGranted && !permissionRevoked) {
@@ -390,7 +386,7 @@ const TestTaking = () => {
         clearInterval(permissionCheckIntervalRef.current);
       }
     };
-  }, [permissionsGranted, testSubmitted, permissionRevoked]);
+  }, [permissionsGranted, testSubmitted, permissionRevoked, attemptId]);
 
   const fetchTest = async () => {
     try {
@@ -542,7 +538,7 @@ const TestTaking = () => {
 
   useEffect(() => {
     const handleVisibilityChange = () => {
-      if (document.hidden) {
+      if (document.hidden && attemptId && !loading && !testSubmitted) {
         handleAutoSubmit();
       }
     };
@@ -565,7 +561,7 @@ const TestTaking = () => {
     document.addEventListener('contextmenu', preventActions);
 
     const handleFullscreenChange = () => {
-      if (!document.fullscreenElement && !testSubmitted && permissionsGranted) {
+      if (!document.fullscreenElement && !testSubmitted && permissionsGranted && attemptId) {
         setIsFullscreenExited(true);
         startViolationTimer('fullscreen');
       }
@@ -591,7 +587,7 @@ const TestTaking = () => {
       document.removeEventListener('fullscreenchange', handleFullscreenChange);
       if (violationIntervalRef.current) clearInterval(violationIntervalRef.current);
     };
-  }, [permissionsGranted, testSubmitted]);
+  }, [permissionsGranted, testSubmitted, loading, attemptId]);
 
   const submitTest = async () => {
     if (!attemptId) {
