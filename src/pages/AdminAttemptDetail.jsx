@@ -49,7 +49,7 @@ const AdminAttemptDetail = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-6">
             <h1 className="text-3xl font-bold text-gray-900">{attempt.testId.title} - Attempt by {attempt.userId.name}</h1>
-            <button onClick={() => navigate(-1)} className="text-indigo-600 hover:text-indigo-900">Back</button>
+            <button onClick={() => navigate(-1)} className="text-emerald-600 hover:text-emerald-900">Back</button>
           </div>
         </div>
       </header>
@@ -64,7 +64,7 @@ const AdminAttemptDetail = () => {
               </p>
             </div>
             <div className="text-right">
-              <p className="text-2xl font-bold text-indigo-600">{attempt.score} points</p>
+              <p className="text-2xl font-bold text-emerald-600">{attempt.score} points</p>
               <p className="text-sm text-gray-500">
                 Time taken: {attempt.totalTime ? `${Math.floor(attempt.totalTime)}:${Math.round((attempt.totalTime % 1) * 60).toString().padStart(2, '0')}` : 'N/A'}
               </p>
@@ -182,9 +182,9 @@ const AdminAttemptDetail = () => {
 
                         {/* Explanation */}
                         {question.explanation && (
-                          <div className="mt-4 p-4 bg-blue-50 rounded-md border border-blue-200">
-                            <p className="text-sm font-medium text-blue-900 mb-1">Explanation:</p>
-                            <p className="text-sm text-blue-800">{question.explanation}</p>
+                          <div className="mt-4 p-4 bg-emerald-50 rounded-md border border-emerald-200">
+                            <p className="text-sm font-medium text-emerald-900 mb-1">Explanation:</p>
+                            <p className="text-sm text-emerald-800">{question.explanation}</p>
                           </div>
                         )}
 

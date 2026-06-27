@@ -170,7 +170,7 @@ const Login = () => {
                   id="name"
                   name="name"
                   type="text"
-                  className={`appearance-none rounded-none relative block w-full px-3 py-2 border placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm ${
+                  className={`appearance-none rounded-none relative block w-full px-3 py-2 border placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 focus:z-10 sm:text-sm ${
                     formErrors.name ? 'border-red-500' : 'border-gray-300'
                   }`}
                   placeholder="Full Name"
@@ -191,7 +191,7 @@ const Login = () => {
                   id="email"
                   name="email"
                   type="email"
-                  className={`appearance-none rounded-none relative block w-full px-3 py-2 border placeholder-gray-500 text-gray-900 ${isLogin ? 'rounded-t-md' : ''} focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm ${
+                  className={`appearance-none rounded-none relative block w-full px-3 py-2 border placeholder-gray-500 text-gray-900 ${isLogin ? 'rounded-t-md' : ''} focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 focus:z-10 sm:text-sm ${
                     formErrors.email ? 'border-red-500' : 'border-gray-300'
                   }`}
                   placeholder="Email address"
@@ -212,7 +212,7 @@ const Login = () => {
                     id="phone"
                     name="phone"
                     type="tel"
-                    className={`appearance-none rounded-none relative block w-full px-3 py-2 border placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm ${
+                    className={`appearance-none rounded-none relative block w-full px-3 py-2 border placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 focus:z-10 sm:text-sm ${
                       formErrors.phone ? 'border-red-500' : 'border-gray-300'
                     }`}
                     placeholder="Phone Number"
@@ -235,7 +235,7 @@ const Login = () => {
                   id="password"
                   name="password"
                   type="password"
-                  className={`appearance-none rounded-none relative block w-full px-3 py-2 border placeholder-gray-500 text-gray-900 ${isLogin ? 'rounded-b-md' : ''} focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm ${
+                  className={`appearance-none rounded-none relative block w-full px-3 py-2 border placeholder-gray-500 text-gray-900 ${isLogin ? 'rounded-b-md' : ''} focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 focus:z-10 sm:text-sm ${
                     formErrors.password ? 'border-red-500' : 'border-gray-300'
                   }`}
                   placeholder="Password"
@@ -255,7 +255,7 @@ const Login = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="group relative w-full flex justify-center items-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:bg-indigo-400 disabled:cursor-not-allowed"
+              className="group relative w-full flex justify-center items-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 disabled:bg-emerald-400 disabled:cursor-not-allowed"
             >
               {isLoading && (
                 <svg
@@ -293,7 +293,7 @@ const Login = () => {
         <div className="text-center">
           <button
             onClick={() => setIsLogin(!isLogin)}
-            className="text-indigo-600 hover:text-indigo-900"
+            className="text-emerald-600 hover:text-emerald-900"
           >
             {isLogin
               ? "Need an account? Register"

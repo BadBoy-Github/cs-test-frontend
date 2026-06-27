@@ -61,7 +61,7 @@ const TestResultDetail = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center py-6">
               <h1 className="text-3xl font-bold text-gray-900">Test Results</h1>
-              <a href="/results" className="text-indigo-600 hover:text-indigo-900">Back to Results</a>
+              <a href="/results" className="text-emerald-600 hover:text-emerald-900">Back to Results</a>
             </div>
           </div>
         </header>
@@ -301,11 +301,11 @@ const TestResultDetail = () => {
 
                             {/* Explanation */}
                             {question.explanation && (
-                              <div className="mt-4 p-4 bg-blue-50 rounded-md border border-blue-200">
-                                <p className="text-sm font-medium text-blue-900 mb-1">
+                              <div className="mt-4 p-4 bg-emerald-50 rounded-md border border-emerald-200">
+                                <p className="text-sm font-medium text-emerald-900 mb-1">
                                   Explanation:
                                 </p>
-                                <p className="text-sm text-blue-800">
+                                <p className="text-sm text-emerald-800">
                                   {question.explanation}
                                 </p>
                               </div>

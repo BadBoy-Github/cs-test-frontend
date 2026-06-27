@@ -80,7 +80,7 @@ const SortableQuestion = ({ question, onEdit, onDelete, isDeleting }) => {
         <div className="flex space-x-2 ml-4">
           <button
             onClick={() => onEdit(question)}
-            className="px-2 py-1 text-xs bg-blue-500 text-white rounded hover:bg-blue-600"
+            className="px-2 py-1 text-xs bg-emerald-500 text-white rounded hover:bg-emerald-600"
           >
             Edit
                   </button>
@@ -514,7 +514,7 @@ const AdminTests = () => {
                     key={test._id}
                     className={`border rounded p-4 ${
                       editingTest && editingTest._id === test._id
-                        ? "border-blue-500 bg-blue-50"
+                        ? "border-emerald-500 bg-emerald-50"
                         : "border-gray-200"
                     }`}
                   >
@@ -542,7 +542,7 @@ const AdminTests = () => {
                           <span
                             className={`inline-block px-2 py-1 text-xs rounded ${
                               test.showResults
-                                ? "bg-blue-100 text-blue-800"
+                                ? "bg-emerald-100 text-emerald-800"
                                 : "bg-gray-100 text-gray-800"
                             }`}
                           >
@@ -667,17 +667,17 @@ const AdminTests = () => {
                               "Delete"
                             )}
                           </button>
-                          <button
-                            onClick={() => handleTestClick(test)}
-                            disabled={showTestForm}
-                            className={`px-3 py-1 text-xs rounded ${
-                              showTestForm
-                                ? "bg-gray-400 text-gray-600 cursor-not-allowed"
-                                : "bg-blue-500 text-white hover:bg-blue-600"
-                            }`}
-                          >
-                            Manage Questions
-                          </button>
+<button
+                             onClick={() => handleTestClick(test)}
+                             disabled={showTestForm}
+                             className={`px-3 py-1 text-xs rounded ${
+                               showTestForm
+                                 ? "bg-gray-400 text-gray-600 cursor-not-allowed"
+                                 : "bg-emerald-500 text-white hover:bg-emerald-600"
+                             }`}
+                           >
+                             Manage Questions
+                           </button>
                         </div>
                       </div>
                     </div>
@@ -704,7 +704,7 @@ const AdminTests = () => {
                     value={testForm.title}
                     onChange={handleTestFormChange}
                     required
-                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500"
                   />
                 </div>
 
@@ -717,7 +717,7 @@ const AdminTests = () => {
                     value={testForm.description}
                     onChange={handleTestFormChange}
                     rows={3}
-                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500"
                   />
                 </div>
 
@@ -733,7 +733,7 @@ const AdminTests = () => {
                       onChange={handleTestFormChange}
                       min="1"
                       required
-                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500"
                     />
                   </div>
 
@@ -748,7 +748,7 @@ const AdminTests = () => {
                       onChange={handleTestFormChange}
                       min="0"
                       max="100"
-                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500"
                     />
                   </div>
 
@@ -762,7 +762,7 @@ const AdminTests = () => {
                       value={testForm.maxAttempts}
                       onChange={handleTestFormChange}
                       min="1"
-                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500"
                     />
                   </div>
                 </div>
@@ -773,7 +773,7 @@ const AdminTests = () => {
                     name="negativeMarking"
                     checked={testForm.negativeMarking}
                     onChange={handleTestFormChange}
-                    className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                    className="w-4 h-4 text-emerald-600 focus:ring-emerald-500 border-gray-300 rounded"
                   />
                   <label className="ml-2 block text-sm text-gray-900">
                     Enable Negative Marking
@@ -792,7 +792,7 @@ const AdminTests = () => {
                       onChange={handleTestFormChange}
                       min="0"
                       step="0.1"
-                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500"
                     />
                   </div>
                 )}
@@ -851,7 +851,7 @@ const AdminTests = () => {
                       resetQuestionForm();
                       setShowQuestionForm(true);
                     }}
-                    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                    className="bg-emerald-600 text-white px-4 py-2 rounded hover:bg-emerald-700"
                   >
                     Add Question
                   </button>
@@ -933,7 +933,7 @@ const AdminTests = () => {
                           name="imageUrl"
                           value={questionForm.imageUrl}
                           onChange={handleQuestionFormChange}
-                          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500"
                           placeholder="https://example.com/image.jpg"
                         />
                         {questionForm.imageUrl && (
@@ -1053,7 +1053,7 @@ const AdminTests = () => {
                                     );
                                   }
                                 }}
-                                className="w-4 h-4 text-indigo-600 focus:ring-indigo-500 border-gray-300"
+                                className="w-4 h-4 text-emerald-600 focus:ring-emerald-500 border-gray-300"
                               />
                               {questionForm.options.length > 1 && (
                                 <button

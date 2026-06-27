@@ -505,7 +505,7 @@ const TestTaking = () => {
   const getQuestionStatusClass = (index) => {
     const status = getQuestionStatus(index);
     const baseClass = "w-8 h-8 flex items-center justify-center rounded-full text-sm font-medium cursor-pointer transition-all ";
-    if (status === 'current') return baseClass + 'bg-indigo-600 text-white ring-2 ring-indigo-600 ring-offset-2';
+    if (status === 'current') return baseClass + 'bg-emerald-600 text-white ring-2 ring-emerald-600 ring-offset-2';
     if (status === 'answered') return baseClass + 'bg-green-100 text-green-800 hover:bg-green-200';
     if (status === 'flagged') return baseClass + 'bg-orange-100 text-orange-800 hover:bg-orange-200';
     return baseClass + 'bg-gray-100 text-gray-600 hover:bg-gray-200';
@@ -564,7 +564,7 @@ const TestTaking = () => {
                      Clear
                    </button>
                    <span className={`px-2 py-1 rounded text-xs font-medium ${
-                     question.marks === 1 ? 'bg-blue-100 text-blue-800' : 'bg-purple-100 text-purple-800'
+                     question.marks === 1 ? 'bg-emerald-100 text-emerald-800' : 'bg-purple-100 text-purple-800'
                    }`}>
                      {question.marks} mark{question.marks !== 1 ? 's' : ''}
                    </span>
@@ -596,7 +596,7 @@ const TestTaking = () => {
                          key={index}
                          className={`flex items-start p-3 rounded-lg border cursor-pointer transition-all ${
                            isSelected
-                             ? 'bg-indigo-50 border-indigo-500'
+                             ? 'bg-emerald-50 border-emerald-500'
                              : 'bg-gray-50 border-gray-200 hover:bg-gray-100'
                          }`}
                        >
@@ -620,7 +620,7 @@ const TestTaking = () => {
 
               {question.type === 'descriptive' && (
                 <textarea
-                  className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-indigo-500"
+                  className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-emerald-500"
                   rows="6"
                   value={answers[question._id] || ''}
                   onChange={(e) => handleAnswer(question._id, e.target.value)}
@@ -631,7 +631,7 @@ const TestTaking = () => {
 
               {question.type === 'coding' && (
                 <textarea
-                  className="w-full p-3 border rounded-lg font-mono text-sm focus:ring-2 focus:ring-indigo-500"
+                  className="w-full p-3 border rounded-lg font-mono text-sm focus:ring-2 focus:ring-emerald-500"
                   rows="12"
                   value={answers[question._id] || ''}
                   onChange={(e) => handleAnswer(question._id, e.target.value)}
@@ -652,7 +652,7 @@ const TestTaking = () => {
                   <button
                     onClick={nextQuestion}
                     disabled={testSubmitted}
-                    className="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                    className="bg-emerald-600 text-white px-4 py-2 rounded hover:bg-emerald-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
                   >
                     Next
                   </button>
@@ -697,7 +697,7 @@ const TestTaking = () => {
               <div className="mt-4 pt-4 border-t border-gray-200">
                 <div className="space-y-2 text-xs">
                   <div className="flex items-center space-x-2">
-                    <span className="w-4 h-4 rounded-full bg-indigo-600"></span>
+                    <span className="w-4 h-4 rounded-full bg-emerald-600"></span>
                     <span className="text-gray-600">Current</span>
                   </div>
                   <div className="flex items-center space-x-2">

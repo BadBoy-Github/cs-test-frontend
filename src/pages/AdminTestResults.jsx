@@ -148,9 +148,9 @@ const AdminTestResults = () => {
                                 </p>
                               </div>
                               <div className="text-right">
-                                <p className="text-lg font-bold text-indigo-600">
-                                  {attempt.score} points
-                                </p>
+<p className="text-lg font-bold text-emerald-600">
+                                   {attempt.score} points
+                                 </p>
                                 <p className="text-sm text-gray-500">
                                   Time taken:{" "}
                                   {attempt.totalTime

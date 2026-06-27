@@ -30,7 +30,7 @@ const Modal = ({
       case 'create':
         return 'bg-green-600 hover:bg-green-700 text-white';
       default:
-        return 'bg-blue-600 hover:bg-blue-700 text-white';
+        return 'bg-emerald-600 hover:bg-emerald-700 text-white';
     }
   };
 
@@ -65,7 +65,7 @@ const Modal = ({
               setInputValue(e.target.value);
               if (onInputChange) onInputChange(e.target.value);
             }}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 mb-4"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 mb-4"
             placeholder="Enter your response..."
           />
         )}

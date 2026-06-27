@@ -98,7 +98,7 @@ const AdminDashboard = () => {
                 value={testData.title}
                 onChange={handleInputChange}
                 required
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500"
               />
             </div>
 
@@ -109,7 +109,7 @@ const AdminDashboard = () => {
                 value={testData.description}
                 onChange={handleInputChange}
                 rows={3}
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500"
               />
             </div>
 
@@ -123,7 +123,7 @@ const AdminDashboard = () => {
                   onChange={handleInputChange}
                   min="1"
                   required
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500"
                 />
               </div>
 
@@ -136,7 +136,7 @@ const AdminDashboard = () => {
                   onChange={handleInputChange}
                   min="0"
                   max="100"
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500"
                 />
               </div>
 
@@ -148,7 +148,7 @@ const AdminDashboard = () => {
                   value={testData.maxAttempts}
                   onChange={handleInputChange}
                   min="1"
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500"
                 />
               </div>
             </div>
@@ -159,7 +159,7 @@ const AdminDashboard = () => {
                 name="negativeMarking"
                 checked={testData.negativeMarking}
                 onChange={handleInputChange}
-                className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                className="h-4 w-4 text-emerald-600 focus:ring-emerald-500 border-gray-300 rounded"
               />
               <label className="ml-2 block text-sm text-gray-900">Enable Negative Marking</label>
             </div>
@@ -174,7 +174,7 @@ const AdminDashboard = () => {
                   onChange={handleInputChange}
                   min="0"
                   step="0.1"
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500"
                 />
               </div>
             )}
@@ -183,7 +183,7 @@ const AdminDashboard = () => {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:bg-indigo-400 disabled:cursor-not-allowed flex items-center space-x-2"
+                className="bg-emerald-600 text-white px-4 py-2 rounded hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 disabled:bg-emerald-400 disabled:cursor-not-allowed flex items-center space-x-2"
               >
                 {isSubmitting && (
                   <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">

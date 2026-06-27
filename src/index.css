@@ -12,7 +12,7 @@
 
 @layer utilities {
   .btn-gradient-primary {
-    @apply bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-2 rounded hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 shadow-md hover:shadow-lg;
+    @apply bg-gradient-to-r from-emerald-600 to-green-600 text-white px-4 py-2 rounded hover:from-emerald-700 hover:to-green-700 transition-all duration-200 shadow-md hover:shadow-lg;
   }
   .btn-gradient-success {
     @apply bg-gradient-to-r from-green-400 to-emerald-600 text-white px-4 py-2 rounded hover:from-green-500 hover:to-emerald-700 transition-all duration-200 shadow-md hover:shadow-lg;

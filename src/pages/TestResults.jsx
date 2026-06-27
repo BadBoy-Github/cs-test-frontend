@@ -123,7 +123,7 @@ const TestResults = () => {
                     </p>
                     <p>Last Attempt: {summary.latestAttemptDate}</p>
                   </div>
-                  <div className="mt-4 text-indigo-600 font-medium">
+                  <div className="mt-4 text-emerald-600 font-medium">
                     View Details →
                   </div>
                 </div>

@@ -72,7 +72,7 @@ const Leaderboard = () => {
           <select
             value={selectedTest}
             onChange={(e) => setSelectedTest(e.target.value)}
-            className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500"
           >
             <option value="all">All Tests</option>
             {tests.map((test) => (
@@ -128,7 +128,7 @@ const Leaderboard = () => {
                    return (
                      <tr
                        key={entry.userId?._id || index}
-                       className={`${isCurrentUser ? "bg-indigo-50" : ""} hover:bg-gray-50 transition-colors`}
+                       className={`${isCurrentUser ? "bg-emerald-50" : ""} hover:bg-gray-50 transition-colors`}
                      >
                        <td className="px-6 py-4 whitespace-nowrap">
                          <div className="flex items-center justify-center w-10 h-10">
@@ -143,12 +143,12 @@ const Leaderboard = () => {
                            />
                            <div>
                              <div
-                               className={`font-medium ${isCurrentUser ? "text-indigo-700" : "text-gray-900"}`}
+                               className={`font-medium ${isCurrentUser ? "text-emerald-700" : "text-gray-900"}`}
                              >
                                {entry.userId?.name || "Anonymous"}
                              </div>
                              {isCurrentUser && (
-                               <span className="text-xs text-indigo-600">
+                               <span className="text-xs text-emerald-600">
                                  (You)
                                </span>
                              )}

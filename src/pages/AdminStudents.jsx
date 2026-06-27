@@ -255,7 +255,7 @@ const AdminStudents = () => {
                     value={studentForm.name}
                     onChange={handleStudentFormChange}
                     required
-                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500"
                   />
                 </div>
 
@@ -270,7 +270,7 @@ const AdminStudents = () => {
                     onChange={handleStudentFormChange}
                     required
                     disabled={!!editingStudent} // Don't allow email changes for existing students
-                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 disabled:bg-gray-100"
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 disabled:bg-gray-100"
                   />
                 </div>
 
@@ -284,7 +284,7 @@ const AdminStudents = () => {
                     value={studentForm.phone}
                     onChange={handleStudentFormChange}
                     required
-                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500"
                   />
                 </div>
 

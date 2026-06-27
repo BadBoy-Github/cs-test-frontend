@@ -78,12 +78,12 @@ const Dashboard = () => {
                   {sessionTime.seconds.toString().padStart(2, "0")}
                 </span>
               )}
-              <button
-                onClick={logout}
-                className="text-indigo-600 hover:text-indigo-900"
-              >
-                Logout
-              </button>
+<button
+                 onClick={logout}
+                 className="text-emerald-600 hover:text-emerald-900"
+               >
+                 Logout
+               </button>
             </div>
           </div>
         </div>
@@ -93,7 +93,7 @@ const Dashboard = () => {
         {user.role === ADMIN_STRING ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div className="bg-white p-6 rounded-lg shadow card-hover">
-              <FaPlus className="text-3xl text-indigo-600 mb-4" />
+              <FaPlus className="text-3xl text-emerald-600 mb-4" />
               <h3 className="text-lg font-medium text-gray-900">Create Test</h3>
               <p className="text-gray-500">Add new tests and questions</p>
               <button
@@ -117,7 +117,7 @@ const Dashboard = () => {
               </button>
             </div>
             <div className="bg-white p-6 rounded-lg shadow card-hover">
-              <FaPoll className="text-3xl text-blue-600 mb-4" />
+              <FaPoll className="text-3xl text-emerald-600 mb-4" />
               <h3 className="text-lg font-medium text-gray-900">
                 Test Results
               </h3>
@@ -145,7 +145,7 @@ const Dashboard = () => {
             </div>
 
             <div className="bg-white p-6 rounded-lg shadow card-hover">
-              <FaChartBar className="text-3xl text-blue-600 mb-4" />
+              <FaChartBar className="text-3xl text-emerald-600 mb-4" />
               <h3 className="text-lg font-medium text-gray-900">Analytics</h3>
               <p className="text-gray-500">View student and test analytics</p>
               <button
