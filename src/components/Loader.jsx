@@ -8,7 +8,7 @@ const Loader = ({ size = 'medium', message = 'Loading...' }) => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center py-8">
+    <div className="flex flex-col items-center justify-center py-8 relative z-0">
       <div className={`${sizeClasses[size]} border-4 border-emerald-200 border-t-emerald-600 rounded-full animate-spin mb-4`}></div>
       <p className="text-gray-600 text-sm">{message}</p>
     </div>
