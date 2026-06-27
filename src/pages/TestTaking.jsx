@@ -96,6 +96,52 @@ const PermissionModal = ({ cameraGranted, micGranted, onRequestPermissions, onCo
   </div>
 );
 
+const ViolationModal = ({ violationType, timeRemaining, onAction, onRequestPermissions, cameraGranted, micGranted }) => (
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+      <h3 className="text-lg font-semibold text-gray-900 mb-4">
+        {violationType === 'fullscreen' ? 'Please be in Full Screen' : 'Please ensure all permissions are granted'}
+      </h3>
+      
+      {violationType === 'permissions' && (
+        <div className="space-y-3 mb-4">
+          <div className="flex items-center space-x-3">
+            <FaVideo className="text-gray-600" />
+            <span className="text-gray-700">Video Permission</span>
+            {cameraGranted ? (
+              <FaCheck className="text-green-500 ml-auto" />
+            ) : (
+              <FaTimes className="text-red-500 ml-auto" />
+            )}
+          </div>
+          <div className="flex items-center space-x-3">
+            <FaMicrophone className="text-gray-600" />
+            <span className="text-gray-700">Audio Permission</span>
+            {micGranted ? (
+              <FaCheck className="text-green-500 ml-auto" />
+            ) : (
+              <FaTimes className="text-red-500 ml-auto" />
+            )}
+          </div>
+        </div>
+      )}
+      
+      <p className="text-gray-600 mb-6">
+        Auto-submitting test in {timeRemaining} seconds...
+      </p>
+      
+      <div className="flex justify-end">
+        <button
+          onClick={onAction}
+          className="px-4 py-2 rounded bg-emerald-600 hover:bg-emerald-700 text-white"
+        >
+          {violationType === 'fullscreen' ? 'Enable Full Screen' : 'Grant Permissions'}
+        </button>
+      </div>
+    </div>
+  </div>
+);
+
 const TestTaking = () => {
   const { testId } = useParams();
   const navigate = useNavigate();
@@ -121,13 +167,15 @@ const TestTaking = () => {
   const [micGranted, setMicGranted] = useState(false);
   const [showPermissionModal, setShowPermissionModal] = useState(true);
   const [permissionRevoked, setPermissionRevoked] = useState(false);
+  const [violationTimeLeft, setViolationTimeLeft] = useState(10);
+  const [violationModalType, setViolationModalType] = useState(null);
   const questionStartTimeRef = useRef(null);
   const submitTestRef = useRef(null);
   const showModalRef = useRef(showModal);
   const storageKeyRef = useRef(null);
   const timerIntervalRef = useRef(null);
-  const warningTimeoutRef = useRef(null);
-  const autoSubmitTimeoutRef = useRef(null);
+  const violationTimeoutRef = useRef(null);
+  const violationIntervalRef = useRef(null);
   const mediaStreamRef = useRef(null);
   const permissionCheckIntervalRef = useRef(null);
 
@@ -209,6 +257,7 @@ const TestTaking = () => {
   };
 
   const handleAutoSubmit = async () => {
+    if (isSubmitting || testSubmitted) return;
     setIsSubmitting(true);
     try {
       for (const question of questions) {
@@ -252,6 +301,56 @@ const TestTaking = () => {
     }
   };
 
+  const startViolationTimer = (type) => {
+    if (violationIntervalRef.current) {
+      clearInterval(violationIntervalRef.current);
+    }
+    setViolationModalType(type);
+    setViolationTimeLeft(10);
+    
+    violationIntervalRef.current = setInterval(() => {
+      setViolationTimeLeft(prev => {
+        if (prev <= 1) {
+          clearInterval(violationIntervalRef.current);
+          if (type === 'fullscreen') {
+            handleAutoSubmit();
+            setIsFullscreenExited(false);
+          } else if (type === 'permissions') {
+            handleAutoSubmit();
+            setPermissionRevoked(false);
+          }
+          setViolationModalType(null);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  };
+
+  const handleViolationAction = async () => {
+    if (violationModalType === 'fullscreen') {
+      await enterFullscreen();
+      if (document.fullscreenElement) {
+        setIsFullscreenExited(false);
+        setViolationModalType(null);
+        if (violationIntervalRef.current) {
+          clearInterval(violationIntervalRef.current);
+          violationIntervalRef.current = null;
+        }
+      }
+    } else if (violationModalType === 'permissions') {
+      const allGranted = await requestAllPermissions();
+      if (allGranted) {
+        setPermissionRevoked(false);
+        setViolationModalType(null);
+        if (violationIntervalRef.current) {
+          clearInterval(violationIntervalRef.current);
+          violationIntervalRef.current = null;
+        }
+      }
+    }
+  };
+
   useEffect(() => {
     checkMediaPermissions();
   }, []);
@@ -270,31 +369,7 @@ const TestTaking = () => {
       const allGranted = await checkMediaPermissions();
       if (!allGranted && !permissionRevoked) {
         setPermissionRevoked(true);
-        showModalRef.current({
-          title: 'Warning',
-          message: 'Permissions revoked! You have 10 seconds to restore camera and microphone access.',
-          onConfirm: () => {},
-          confirmText: 'OK',
-          type: 'confirm'
-        });
-        autoSubmitTimeoutRef.current = setTimeout(async () => {
-          if (permissionRevoked) {
-            await handleAutoSubmit();
-          }
-        }, 10000);
-      } else if (allGranted && permissionRevoked) {
-        setPermissionRevoked(false);
-        if (autoSubmitTimeoutRef.current) {
-          clearTimeout(autoSubmitTimeoutRef.current);
-          autoSubmitTimeoutRef.current = null;
-        }
-        showModalRef.current({
-          title: 'Permissions Restored',
-          message: 'Camera and microphone permissions have been restored. Test continues.',
-          onConfirm: () => {},
-          confirmText: 'OK',
-          type: 'confirm'
-        });
+        startViolationTimer('permissions');
       }
     };
 
@@ -460,13 +535,7 @@ const TestTaking = () => {
   useEffect(() => {
     const handleVisibilityChange = () => {
       if (document.hidden) {
-        setTabSwitches(prev => {
-          const newCount = prev + 1;
-          if (newCount > 3 && !isSubmitting && !testSubmitted) {
-            handleAutoSubmit();
-          }
-          return newCount;
-        });
+        handleAutoSubmit();
       }
     };
 
@@ -490,41 +559,16 @@ const TestTaking = () => {
     const handleFullscreenChange = () => {
       if (!document.fullscreenElement && !testSubmitted && permissionsGranted) {
         setIsFullscreenExited(true);
-
-        if (warningTimeoutRef.current) {
-          clearTimeout(warningTimeoutRef.current);
-        }
-        if (autoSubmitTimeoutRef.current) {
-          clearTimeout(autoSubmitTimeoutRef.current);
-        }
-
-        warningTimeoutRef.current = setTimeout(() => {
-          showModalRef.current({
-            title: 'Warning',
-            message: 'Please return to fullscreen immediately.',
-            onConfirm: () => {},
-            confirmText: 'OK',
-            type: 'confirm'
-          });
-
-          autoSubmitTimeoutRef.current = setTimeout(async () => {
-            if (isFullscreenExited) {
-              await handleAutoSubmit();
-            }
-          }, 10000);
-        }, 1000);
+        startViolationTimer('fullscreen');
       }
 
       if (document.fullscreenElement && isFullscreenExited) {
-        if (warningTimeoutRef.current) {
-          clearTimeout(warningTimeoutRef.current);
-          warningTimeoutRef.current = null;
-        }
-        if (autoSubmitTimeoutRef.current) {
-          clearTimeout(autoSubmitTimeoutRef.current);
-          autoSubmitTimeoutRef.current = null;
-        }
         setIsFullscreenExited(false);
+        if (violationIntervalRef.current) {
+          clearInterval(violationIntervalRef.current);
+          violationIntervalRef.current = null;
+        }
+        setViolationModalType(null);
       }
     };
 
@@ -537,10 +581,9 @@ const TestTaking = () => {
       document.removeEventListener('cut', preventActions);
       document.removeEventListener('contextmenu', preventActions);
       document.removeEventListener('fullscreenchange', handleFullscreenChange);
-      if (warningTimeoutRef.current) clearTimeout(warningTimeoutRef.current);
-      if (autoSubmitTimeoutRef.current) clearTimeout(autoSubmitTimeoutRef.current);
+      if (violationIntervalRef.current) clearInterval(violationIntervalRef.current);
     };
-  }, [permissionsGranted, testSubmitted]);
+  }, [permissionsGranted, testSubmitted, isFullscreenExited]);
 
   const submitTest = async () => {
     if (!attemptId) {
@@ -744,6 +787,17 @@ const TestTaking = () => {
         />
       )}
 
+      {violationModalType && (
+        <ViolationModal
+          violationType={violationModalType}
+          timeRemaining={violationTimeLeft}
+          onAction={handleViolationAction}
+          onRequestPermissions={requestAllPermissions}
+          cameraGranted={cameraGranted}
+          micGranted={micGranted}
+        />
+      )}
+
       <header className="bg-white shadow p-4">
         <div className="flex justify-between items-center">
           <h1 className="text-xl font-bold text-gray-900">{test.title}</h1>
@@ -840,9 +894,9 @@ const TestTaking = () => {
                              disabled={testSubmitted}
                              className="mr-3 h-4 w-4 mt-0.5 flex-shrink-0"
                            />
-                          <span className="text-sm font-medium text-gray-700 break-words whitespace-normal flex-1 min-w-0">
-                            {String.fromCharCode(65 + index)}. {option}
-                          </span>
+                           <span className="text-sm font-medium text-gray-700 break-words whitespace-normal flex-1 min-w-0">
+                             {String.fromCharCode(65 + index)}. {option}
+                           </span>
                         </label>
                       );
                     })}
